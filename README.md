@@ -142,10 +142,11 @@ class MainPresenter : BasePresenter<MainView>() {
     }
 }
 ```
+Kotlin mobile codegen is production-ready.
 
 # Delivery
+Codegen can generate code during API specs CI. Generated code can be deployed into Maven or on Git with assigned version. Developers of backend and frontend can be notified about new version using messenger integration.
 Codegen is infrastructure component thus it can be reused between several projects. It can be deployed as Docker container and used in CI.  
-Codegen can generate code during API specs CI. Generated code can be deployed into Maven or on Github with assigned version. Developers of backend and client can be notified about new version using messenger integration.
 
 # Backward compatibility
 There is the way to ensure backward compatibility of new versions of API. Language that used for writing of API specs is JSON so it's pretty easy to implement a script that will check that new version of API contains all fields and operations that present in previous version of API. This script can be run in CI so deploying of not backward compatible API can be prohibited.  
@@ -155,10 +156,10 @@ Breaking changes can be made only in major version that must be explicitly marke
 If frontend uses same or older version of API as backend than problem of runtime errors caused by schema mismatch will be completely solved.    
 
 # API modification step-by-step
-1. Developers modifies the API specs
+1. Developer modifies the API specs
 2. Developer commits changes to remote repository with configured CI
-3. CI builds API clients, assigns version and deploys artifact it to some repository
-4. Developers gets a notification about new version and updates their projects 
+3. CI builds API clients, assigns version and deploys the artifact to some repository (Maven, Git...)
+4. Developers gets a notification about new version and updates generated clients in their projects 
 
 ## Status of Mobile Kotlin generator: Production ready
 ## Status of Spring generator: Initial prototype
