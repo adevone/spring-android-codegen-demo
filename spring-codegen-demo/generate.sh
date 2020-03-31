@@ -1,0 +1,1 @@
+java -jar ../gen.jar generate --lang ru.napoleonit.eshopCodegen.go.GoServerCodegen --input-spec ../specs/specs/client.json --output api --api-package client --model-package client

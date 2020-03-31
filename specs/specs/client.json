@@ -1,0 +1,112 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "ALI DEMO API",
+    "description": "ALI DEMO API",
+    "contact": {
+      "name": "Kirill Terekhov",
+      "email": "kirill.terekhov@aliexpress.ru"
+    },
+    "version": "0.1"
+  },
+  "servers": [
+    {
+      "url": "{server}",
+      "variables": {
+        "server": {
+          "enum": [
+            "http://localhost:8080"
+          ],
+          "default": "http://localhost:8080"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "DeviceOS": [],
+      "DeviceId": [],
+      "ApiVersion": []
+    }
+  ],
+  "paths": {
+    "/about": {
+      "get": {
+        "summary": "Get an info about the company",
+        "operationId": "getAbout",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/About"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "wrongParam"
+          }
+        }
+      },
+      "put": {
+        "summary": "Set an info about the company",
+        "operationId": "setAbout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/About"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "DeviceOS": {
+        "name": "deviceOS",
+        "in": "header",
+        "description": "Операционная система устройства, с которого отправляется запрос",
+        "type": "apiKey"
+      },
+      "DeviceId": {
+        "name": "deviceId",
+        "in": "header",
+        "description": "Идентификатор устройства, с которого отправляется запрос",
+        "type": "apiKey"
+      },
+      "ApiVersion": {
+        "name": "apiVersion",
+        "in": "header",
+        "description": "Версия спецификации API",
+        "type": "apiKey"
+      }
+    },
+    "schemas": {
+      "About": {
+        "type": "object",
+        "required": [
+          "title",
+          "text"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

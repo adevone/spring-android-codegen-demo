@@ -1,0 +1,5 @@
+{
+    "npmName": "eshop_api_client",
+    "npmVersion": "%{version}",
+    "npmRepository": "https://gitlab.itnap.ru/eShop/apiclients/tsapiclient.git"
+}

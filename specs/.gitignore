@@ -1,0 +1,11 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+
+.DS_Store
+
+.vscode/
+/node_modules/
+/dist/
+/specs/README.md
+/specs/.swagger-codegen
+/specs/.swagger-codegen-ignore

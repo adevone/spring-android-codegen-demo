@@ -1,0 +1,4 @@
+rootProject.name = 'spring-codegen-demo'
+
+include(":app")
+include(":api")

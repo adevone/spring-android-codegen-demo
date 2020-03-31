@@ -1,0 +1,7 @@
+{
+    "podHomepage": "https://%{git}",
+    "podSummary": "ESHOP API Client for Swift",
+    "projectName": "ESHOPSwiftAPIClient",
+    "podSource": "{ :git => 'https://%{git}', :branch => '%{version}' }",
+    "podVersion": "%{version}"
+}

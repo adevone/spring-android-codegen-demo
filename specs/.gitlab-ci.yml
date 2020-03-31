@@ -1,0 +1,49 @@
+image: docker:latest
+
+variables:
+  IMAGE_NAME: $CI_REGISTRY_IMAGE:latest
+
+stages:
+  - deploy_libs
+  - build_docs
+  - cleanup_docs
+  - deploy_docs
+
+.before_script_for_docs: &before_script_for_docs
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+deploy_libs:
+  only:
+    - /^\d+\.\d+\.\d+$/
+    - master
+  image: reg.gitlab.itnap.ru/eshop/codegen:latest
+  stage: deploy_libs
+  script:
+    - '/bin/sh deploy.sh'
+
+build_docs:
+  <<: *before_script_for_docs
+  stage: build_docs
+  script:
+    - docker build --pull -t $IMAGE_NAME .
+    - docker push $IMAGE_NAME
+  only:
+    - master
+
+cleanup_docs:
+  <<: *before_script_for_docs
+  stage: cleanup_docs
+  script:
+    - docker image rm -f $(docker image inspect -f '{{.Id}}' $IMAGE_NAME)
+  when: always
+  only:
+    - master
+
+deploy_docs:
+  stage: deploy_docs
+  script:
+    - apk add --update --no-cache curl
+    - curl -XPOST $WWW_WEBHOOK
+  only:
+    - master
