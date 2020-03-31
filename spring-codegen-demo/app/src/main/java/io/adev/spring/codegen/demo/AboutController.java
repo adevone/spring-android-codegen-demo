@@ -29,7 +29,7 @@ public class AboutController {
         );
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/about")
+    @DefaultApi.SetAbout.Mapping
     public void set(HttpServletRequest request, HttpServletResponse response) throws IOException {
         DefaultApi.SetAbout.Params params = api.setAbout.paramsFrom(request);
         about = params.getBody();
