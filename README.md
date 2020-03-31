@@ -109,7 +109,7 @@ public class AboutController {
 }
 ```
 
-With this syntax backend developer will be notified in compile-time about response type change or new fields addition.
+With this syntax backend developer will be notified about response type change or new fields addition in compile-time.
 
 *Status of Spring generator: Initial prototype*  
 I spent near 6 hours for implementation of Spring generator for now so it have some [Limitations](./spring-codegen-demo/README.md#Limitations)
