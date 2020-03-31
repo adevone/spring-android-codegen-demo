@@ -3,14 +3,89 @@
 [Spring demo](./spring-codegen-demo/README.md)  
 [Android demo](./android-codegen-demo/README.md)  
 
-[Specs itself](./specs/README.md)
+[API specs](./specs/README.md)
 
-# About codegen
+# Which problem solves codegen?
 
-API code generation introduces single source of truth between backend and frontend (web/mobile).     
-Codegen generates API models and route handler both for backend and frontent.
+API code generation introduces single source of truth between backend and frontend (web/mobile).  
+API specs will be documented using modern fork of Swagger called OpenAPI.
 
-Example of usage with Java+Spring+Jackson:
+# How API specs with codegen works
+
+Codegen generates API models and route handlers by API specs both for backend and frontend.  
+Users of API will be notices about each change of API in compile-time on API specs version bump.  
+API specs just adds strict schema to existing API. There is no need to change transport between backend and frontend.
+
+Example of API Specs:
+```json
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Demo",
+    "version": "0.1"
+  },
+  "paths": {
+    "/about": {
+      "get": {
+        "operationId": "getAbout",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/About"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "wrongParam"
+          }
+        }
+      },
+      "put": {
+        "operationId": "setAbout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/About"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "About": {
+        "type": "object",
+        "required": [
+          "title",
+          "text"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Usage of generated code with Java+Spring+Jackson:
 ```java
 @RestController("/")
 public class AboutController {
@@ -36,7 +111,10 @@ public class AboutController {
 
 With this syntax backend developer will be notified in compile-time about response type change or new fields addition.
 
-Example of usage with Kotlin+Coroutines+Moxy+Kodein:
+*Status of Spring generator: Initial prototype*  
+I spent near 6 hours for implementation of Spring generator for now so it have some [Limitations](./spring-codegen-demo/README.md#Limitations)
+
+Usage of generated code with Kotlin+Coroutines+Moxy+Kodein:
 ```kotlin
 interface MainView : MvpView {
 
@@ -65,21 +143,16 @@ class MainPresenter : BasePresenter<MainView>() {
 }
 ```
 
-# Architecture
-
-![Architecture](https://i.ibb.co/WBdRKTZ/architecture-full-en.png)
-
-Project that uses codegen can contain 4 parts:
-1. API specs in OpenAPI format (modern fork of SwaggerAPI)
-2. Codegen itself
-3. Backend API client
-4. Frontend API client
-
-API completely independent from another parts of system. Codegen knows how to generate models and routes for supported platforms. Frontend and backend depends from API specs through generated code.
-
 # Delivery
 Codegen is infrastructure component thus it can be reused between several projects. It can be deployed as Docker container and used in CI.  
 Codegen can generate code during API specs CI. Generated code can be deployed into Maven or on Github with assigned version. Developers of backend and client can be notified about new version using messenger integration.
+
+# Backward compatibility
+There is the way to ensure backward compatibility of new versions of API. Language that used for writing of API specs is JSON so it's pretty easy to implement a script that will check that new version of API contains all fields and operations that present in previous version of API. This script can be run in CI so deploying of not backward compatible API can be prohibited.  
+Breaking changes can be made only in major version that must be explicitly marked as major.  
+
+# No runtime errors
+If frontend uses same or older version of API as backend than problem of runtime errors caused by schema mismatch will be completely solved.    
 
 # API modification step-by-step
 1. Developers modifies the API specs
@@ -87,5 +160,5 @@ Codegen can generate code during API specs CI. Generated code can be deployed in
 3. CI builds API clients, assigns version and deploys artifact it to some repository
 4. Developers gets a notification about new version and updates their projects 
 
-## Status of Spring generator: Initial prototype
 ## Status of Mobile Kotlin generator: Production ready
+## Status of Spring generator: Initial prototype

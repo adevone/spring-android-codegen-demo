@@ -1,4 +1,5 @@
 # Status of Spring generator: Initial prototype
+I spent near 6 hours for implementation of Spring generator for now so it have some [Limitations](#Limitations)
 
 # How launch Spring app
 1. Launch Spring server using `./gradlew :app:run`
@@ -12,4 +13,4 @@ Server uses `8080` port by default
 2. Run `./generate.sh`
 
 # Limitations
-- Only non-array and non-primitive response schemas supported at now
+- Only non-array and non-primitive response schemas supported at now. This functionality can be implemented for something like 4 hours   
