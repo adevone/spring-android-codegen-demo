@@ -8,7 +8,7 @@
 # Which problem solves codegen?
 
 API code generation introduces single source of truth between backend and frontend (web/mobile).  
-API specs will be documented using modern fork of Swagger called OpenAPI.
+API specs will can be developed using modern fork of Swagger called OpenAPI.
 
 # How API specs with codegen works
 
