@@ -66,18 +66,21 @@ class DefaultApi(jsonFactory: JsonFactory) {
         fun respondOk( data: About, response: HttpServletResponse) {
             response.setHeader("X-Result-Name", "About")
             response.setStatus(200)
+            val out = response.writer
             response.setContentType("application/json")
             val mapper = ObjectMapper(jsonFactory)
             val json = mapper.writeValueAsString(data)
-            val out = response.writer
             out.print(json)
             out.flush()
-            response.setContentType("text/plain")
         }
         @Throws(IOException::class)
         fun respondWrongParam(response: HttpServletResponse) {
             response.setHeader("X-Result-Name", "None")
             response.setStatus(400)
+            val out = response.writer
+            response.setContentType("text/plain")
+            out.print("")
+            out.flush()
         }
 
     }
@@ -119,6 +122,10 @@ class DefaultApi(jsonFactory: JsonFactory) {
         fun respondOk(response: HttpServletResponse) {
             response.setHeader("X-Result-Name", "None")
             response.setStatus(200)
+            val out = response.writer
+            response.setContentType("text/plain")
+            out.print("")
+            out.flush()
         }
 
     }
@@ -126,6 +133,6 @@ class DefaultApi(jsonFactory: JsonFactory) {
 
 private fun <T: Any> HttpServletRequest.getBodyParameter(jsonFactory: JsonFactory, clazz: KClass<T>): T {
     val mapper = ObjectMapper(jsonFactory)
-    val bodyString = this.parameterMap.toList().first().first
+    val bodyString = this.parameterMap.toList().firstOrNull()?.first ?: this.inputStream.reader().readText()
     return mapper.readValue(bodyString, clazz.java)
 }
